@@ -1,65 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Rainbow Page</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LUCIO</title>
+
 <style>
   body {
     margin: 0;
-    background: white;
-    font-family: "Comic Sans MS", Arial, sans-serif;
-    text-align: center;
+    overflow: hidden;
+    font-family: "Comic Sans MS", cursive;
+    transition: background 1s ease;
   }
 
-  .center-box {
-    margin-top: 120px;
-    font-size: 28px;
-    font-weight: bold;
+  #sky {
+    position: fixed;
+    width: 100%;
+    height: 100%;
   }
 
-  .link {
-    font-size: 32px;
-    text-decoration: none;
-    color: black;
+  #title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 120px;
+    color: white;
+    -webkit-text-stroke: 3px black;
+    text-shadow: 0 0 10px black;
   }
 
-  .about {
-    margin-top: 80px;
-    font-size: 18px;
-    font-weight: bold;
+  .celestial {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
   }
 
-  .r1 { color: red; }
-  .r2 { color: orange; }
-  .r3 { color: yellow; }
-  .r4 { color: green; }
-  .r5 { color: blue; }
-  .r6 { color: indigo; }
-  .r7 { color: violet; }
+  #sun {
+    background: yellow;
+    box-shadow: 0 0 40px yellow;
+  }
+
+  #moon {
+    background: #ddd;
+    box-shadow: 0 0 30px white;
+  }
 </style>
 </head>
+
 <body>
-
-<div class="center-box">
-  <a class="link" href="https://lucio.elementfx.com/">
-    <s>https</s>://lucio.elementfx.com/
-  </a>
+<div id="sky">
+  <div id="sun" class="celestial"></div>
+  <div id="moon" class="celestial"></div>
+  <div id="title">LUCIO</div>
 </div>
 
-<div class="about">
-  <div class="r1">about me: i like coding websites</div>
-  <div class="r2">about me: i build random tools and experiments</div>
-  <div class="r3">about me: i enjoy old school web vibes</div>
-  <div class="r4">about me: i like neon and rainbow aesthetics</div>
-  <div class="r5">about me: i create interactive html pages</div>
-  <div class="r6">about me: i explore tech and design</div>
-  <div class="r7">about me: i keep things simple but creative</div>
+<script>
+function updateSky() {
+  const now = new Date();
+  const hour = now.getHours() + now.getMinutes() / 60;
 
-  <div class="r1">about me: coding is fun</div>
-  <div class="r2">about me: experimenting with ideas</div>
-  <div class="r3">about me: building cool web stuff</div>
-  <div class="r4">about me: learning every day</div>
-</div>
+  const sun = document.getElementById("sun");
+  const moon = document.getElementById("moon");
+
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  // Day or night
+  const isDay = hour >= 6 && hour <= 18;
+
+  document.body.style.background = isDay
+    ? "linear-gradient(#4fa3ff, #87ceeb)"
+    : "linear-gradient(#050816, #1a1f3d)";
+
+  // normalized time (0 → 1)
+  const t = hour / 24;
+
+  // smooth arc path
+  const radiusX = width / 2;
+  const radiusY = height / 2.2;
+
+  const centerX = width / 2;
+  const centerY = height * 0.9;
+
+  // sun position (half circle)
+  const sunAngle = (t * Math.PI * 2) - Math.PI / 2;
+
+  const sunX = centerX + Math.cos(sunAngle) * radiusX;
+  const sunY = centerY + Math.sin(sunAngle) * radiusY;
+
+  // moon opposite
+  const moonAngle = sunAngle + Math.PI;
+
+  const moonX = centerX + Math.cos(moonAngle) * radiusX;
+  const moonY = centerY + Math.sin(moonAngle) * radiusY;
+
+  sun.style.left = sunX + "px";
+  sun.style.top = sunY + "px";
+
+  moon.style.left = moonX + "px";
+  moon.style.top = moonY + "px";
+
+  sun.style.display = isDay ? "block" : "none";
+  moon.style.display = isDay ? "none" : "block";
+}
+
+setInterval(updateSky, 1000);
+updateSky();
+
+window.addEventListener("resize", updateSky);
+</script>
 
 </body>
 </html>
